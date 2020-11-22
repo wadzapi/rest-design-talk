@@ -1,8 +1,7 @@
-.DS_Store
-.svn
-log/*.log
-tmp/**
+log/
+tmp/
 node_modules/
 .sass-cache
-css/reveal.min.css
-js/reveal.min.js
+css/
+js/
+package-lock.json

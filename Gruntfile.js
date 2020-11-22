@@ -1,3 +1,6 @@
+'use strict';
+const sass = require('node-sass');
+
 /* global module:false */
 module.exports = function(grunt) {
 	var port = grunt.option('port') || 8000;
@@ -30,6 +33,9 @@ module.exports = function(grunt) {
 		},
 
 		sass: {
+            options: {
+                implementation: sass
+            },
 			core: {
 				files: {
 					'css/reveal.css': 'css/reveal.scss',
@@ -64,6 +70,8 @@ module.exports = function(grunt) {
 
 		jshint: {
 			options: {
+				node: true,
+				esversion: 6,
 				curly: false,
 				eqeqeq: true,
 				immed: true,
@@ -84,7 +92,7 @@ module.exports = function(grunt) {
 					exports: false
 				}
 			},
-			files: [ 'Gruntfile.js', 'js/reveal.js' ]
+			files: [ 'Gruntfile.js' ]
 		},
 
 		connect: {
