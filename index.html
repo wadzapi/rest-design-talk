@@ -3,22 +3,19 @@
 
     <head>
         <meta charset="utf-8">
+        <title>wadzapi.me</title>
 
-        <title>Designing REST API's - A process oriented approach</title>
-
-        <meta name="description" content="">
-        <meta name="author" content="Lars de Ridder">
-
+        <meta name="description" content="Wadzapi.me homepage">
+        <meta name="author" content="Wadzapi">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <link rel="stylesheet" href="css/reveal.css">
-        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="static/css/reveal.css">
+        <link rel="stylesheet" href="static/css/theme/black.css" id="theme">
 
         <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="lib/css/zenburn.css">
+        <link rel="stylesheet" href="static/css/zenburn.css">
 
         <!-- If the query includes 'print-pdf', include the PDF print sheet -->
         <script>
@@ -26,13 +23,13 @@
                 var link = document.createElement( 'link' );
                 link.rel = 'stylesheet';
                 link.type = 'text/css';
-                link.href = 'css/print/pdf.css';
+                link.href = 'static/css/print/pdf.css';
                 document.getElementsByTagName( 'head' )[0].appendChild( link );
             }
         </script>
 
         <!--[if lt IE 9]>
-        <script src="lib/js/html5shiv.js"></script>
+        <script src="static/js/html5shiv.js"></script>
         <![endif]-->
     </head>
 
@@ -43,617 +40,86 @@
             <!-- Any section element inside of this container is displayed as a slide -->
             <div class="slides">
                 <section>
-                    <h1>Designing REST API's</h1>
-                    <p>A process oriented approach</p>
+                    <h1>Wadzapi.me</h1>
                 </section>
 
                 <section>
                     <h2>Who am I?</h2>
                     <ul>
-                        <li class="fragment">Lars de Ridder</li>
-                        <li class="fragment">Head of Tech at Paylogic</li>
+                        <li class="fragment">Java Tech lead</li>
                         <li class="fragment">Designed a few REST API's</li>
-                        <li class="fragment">Also do other things</li>
+						<li class="fragment">Bootstrapped and architected some Java projects</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2>Show of hands</h2>
                     <ul>
-                        <li class="fragment">Who used a REST API?</li>
-                        <li class="fragment">Who knows what REST stands for?</li>
-                        <li class="fragment">Who recently built an internal RESTful API?</li>
-                        <li class="fragment">Who recently built a public-facing RESTful API?</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Table of contents</h2>
-                    <ul>
-                        <li>Goals of REST</li>
-                        <li>Process vs data oriented API design</li>
-                        <li>Media types for API's</li>
-                        <li>Documentation and Discoverability</li>
-                        <li>Best practices / lessons learned</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>What will you take away from this talk?</h2>
-                    <ul>
-                        <li>Change the way you think about designing REST API's</li>
-                        <li>Designing REST API's isn't easy</li>
-                        <li>Process is more important than data</li>
-                        <li>Media types can make my life as an API developer easier</li>
+                        <li class="fragment"><a href="https://github.com/wadzapi?tab=repositories">Wadzapi GitHub</a></li>
+                        <!-- li class="fragment">TODO: public projects</li -->
                     </ul>
                 </section>
 
                 <!-- WHY -->
-
-                <section>
-                    <h1>Goals of REST</h1>
+                <!-- section>
+                    <h1>Goals</h1>
                     <ul>
-                        <li>Loose coupling of client and server</li>
-                        <li>Scalable</li>
-                        <li>Use existing web infrastructure</li>
+                        <li>TODO: goal 1</li>
+                        <li>TODO: goal 2</li>
+                        <li>TODO: goal 3</li>
                     </ul>
                     <p>The web seems to work well enough, let's design API's the same way</p>
-                </section>
+                </section -->
 
                 <!-- DESIGN -->
-
-                <section>
-                    <h1>REST API design</h1>
-                    <blockquote>But isn't REST just exposing my DB tables as resources?</blockquote>
-                </section>
-
-                <section>
-                    <h2>How to design your REST API</h2>
-                    <p class="fragment">Step 1 - Design your process</p>
-                    <p class="fragment">Step 2 - Design your process!</p>
-                    <p class="fragment">Step 3 - Design your process!!</p>
-                </section>
-
-                <section>
-                    <h1>Data oriented design</h1>
-                </section>
-
-                <section>
-                    <h2>How?</h2>
-                    <p>Simple!</p>
-                    <ul>
-                        <li>Expose DB tables / ORM models als resources</li>
-                        <li>Use relations between entities as link relations</li>
-                        <li>Use HTTP verbs for CRUD</li>
-                    </ul>
-                    <p>Or use <a target="_blank" href="https://github.com/jeffknupp/sandman">https://github.com/jeffknupp/sandman</a></p>
-                </section>
-
-                <section>
-                    <section>
-                        <h2>Example case</h2>
-                    </section>
-
-                    <section>
-                        <h3>The data</h3>
-                        <img src="img/coffee_data_1.png"/>
-                    </section>
-
-                    <section>
-                        <h3>Resources</h3>
-                        <pre><code data-trim contenteditable>
-/coffeetypes            GET
-/cupsofcoffee           GET, POST
-/baristas               GET
-/orders                 GET, POST
-                        </code></pre>
-                    </section>
-
-                    <section>
-                        <h3>Flow</h3>
-                        <pre><code data-trim contenteditable>
-GET /coffeetypes
-
-GET /baristas
-
-POST /cupsofcoffee { coffee_type: ... }
-  &lt;- { self: /cupsofcoffee/xyz }
-
-POST /orders { cupsofcoffee: [ xyz ], barista: ... }
-                        </code></pre>
-                        <p class="fragment">What's missing?</p>
-                    </section>
-
-                    <section>
-                        <h3>Really the right approach?</h3>
-                        <img src="img/coffee_data_2.png"/>
-                    </section>
-
-                    <section>
-                        <h3>Really?</h3>
-                        <img src="img/coffee_data_3.png"/>
-                    </section>
-                </section>
-
-                <section>
-                    <h2>Advantages</h2>
-                    <ul>
-                        <li>Easy to design and build</li>
-                        <li>Flexible clients</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Disadvantages</h2>
-                    <ul>
-                        <li>Hard to build clients</li>
-                        <li>Logic in clients (DRY?)</li>
-                        <li>Easy to run into inefficient interactions</li>
-                        <li>Tight coupling between API design and DB design</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>When data-oriented design?</h2>
-                    <ul>
-                        <li>Internal API's</li>
-                        <li>HTML ORM's</li>
-                        <li>Flexibility of clients is essential</li>
-                        <li>You're <strike>lazy</strike> pressed for time</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h1>Process oriented design</h1>
-                </section>
-
-                <section>
+                <!-- section>
                     <h2>Principles</h2>
                     <ul>
-                        <li>Design API for a purpose</li>
-                        <li>Limit flexibility for ease of use and efficiency</li>
-                        <li>Focus on relations (and process), not on resources (and data)</li>
+                        <li>TODO: principle 1</li>
+                        <li>TODO: principle 2</li>
+                        <li>TODO: principle 3</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2>How?</h2>
                     <ul>
-                        <li>Model your process as seen from the end-user</li>
-                        <li>Determine which steps in this process your client supports</li>
-                        <li>For every step: "Invent" resource</li>
-                        <li>For every resource: Determine relations</li>
-                        <li>Finally: Consider which data is involved for each resource</li>
+                        <li>TODO: how 1</li>
+						<li>TODO: how 2</li>
+						<li>TODO: how 3</li>
                     </ul>
-                </section>
-
-                <section>
-                    <h2>Model your process as seen from the end-user</h2>
-                    <p>State diagram, flow chart, use case, BPMN, words, whatever</p>
-                </section>
-
-                <section>
-                    <h2>Coffee process</h2>
-                    <img src="img/coffee_process.png"/>
-                </section>
-
-                <section>
-                    <h2>Determine which steps in this process your client supports</h2>
-                    <img src="img/coffee_process_2.png"/>
-                </section>
-
-                <section>
-                    <h2>For every step: "Invent" resource</h2>
-                    <ul>
-                        <li>Resource has to be a <strong>noun</strong></li>
-                        <li>Verbs come from HTTP</li>
-                        <li>Avoid /orders/create or /barista/order</li>
-                    </ul>
-                    <p>Base design decisions on what the <strong>API user</strong> wants to achieve</p>
-                </section>
-
-                <section>
-                    <h2>Coffee resources</h2>
-                    <p>Operations: Choose coffee type, order with barista, and pay</p>
-                    <pre><code data-trim contenteditable>
-/coffeetypes            GET
-/quote                  GET
-/orders (or /payments)  GET, POST
-
-Maybe /baristas?        GET
-                    </code></pre>
-                </section>
-
-                <section>
-                    <h2>For every resource: Determine relations</h2>
-                    <p>This is <strong>essential</strong></p>
-                    <ul>
-                        <li>The API should guide the client</li>
-                        <li>Use link relations, never rely on URL's</li>
-                        <li>Use standard link relations where possible (<a target="_blank" href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA.org</a>)</li>
-                        <li>Properly and extensively document your own relations</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>The coffee must flow</h2>
-                    <pre><code data-trim contenteditable>
-GET /coffeetypes
-
-GET /quote?coffeetype=xyz&amp;quantity=2
-&lt;- { _links: { place_order: /orders }, ... }
-
-POST /orders { coffee: [ /coffeetypes/xyz: 2 ] }
-                    </code></pre>
-                </section>
-
-                <section>
-                    <h2>Example relations</h2>
-                    <img src="img/rels.png"/>
-                    <img src="img/ticketshoprel.png"/>
-                </section>
-
-                <section>
-                    <h2>Finally: consider which data is involved for every resource</h2>
-                    <p>Don't be afraid to manipulate multiple (or no!) DB tables for one resource</p>
-                </section>
-
-                <section>
-                    <h2>Advantages</h2>
-                    <ul>
-                        <li>Logic on server</li>
-                        <li>Building clients is easy</li>
-                        <li>Interactions are efficient (as designed)</li>
-                        <li>No coupling between DB models and API interaction</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>Disadvantages</h2>
-                    <ul>
-                        <li>Less flexible clients (but can be built into design)</li>
-                        <li>Initial design is difficult</li>
-                    </ul>
-                </section>
-
-                <!-- MEDIATYPES -->
-
-                <section>
-                    <h1>Media types for API's</h1>
-                    <blockquote>Can't we just use HTML?</blockquote>
-                </section>
-
-                <section>
-                    <h2>What is an API media type</h2>
-                    <p>Standard on how to format your (JSON) response, containing conventions to combat bike-shedding</p>
-                </section>
-
-                <section>
-                    <h2>Why consider API media types?</h2>
-                    <ul>
-                        <li>Docs and tooling already written</li>
-                        <li>Conventions for many concepts</li>
-                        <li>Why reinvent the wheel?</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <h2>What do they define?</h2>
-                    <ul>
-                        <li>Link relations (and deprecation)</li>
-                        <li>Collections</li>
-                        <li>Error messages</li>
-                        <li>Resource embedding</li>
-                        <li>POST schemas</li>
-                    </ul>
-                </section>
-
-                <section>
-                    <section>
-                        <h2>Some media types</h2>
-                    </section>
-
-                    <section>
-                        <h2>HAL</h2>
-                        <p><a target="_blank" href="http://stateless.co/hal_specification.html">http://stateless.co/hal_specification.html</a></p>
-                        <ul>
-                            <li>Minimalistic -&gt; Embrace HTTP standards</li>
-                            <li>Process-oriented</li>
-                        </ul>
-                        <pre><code data-trim contenteditable>
-{
-    "_links": {
-        "self": { "href": "/orders" },
-        "next": { "href": "/orders?page=2" }
-    },
-    "currentlyProcessing": 14,
-    "shippedToday": 20,
-    "_embedded": {
-        "order": [{
-            "_links": {
-                "self": { "href": "/orders/123" },
-                "basket": { "href": "/baskets/98712" },
-                "customer": { "href": "/customers/7809" }
-            },
-            "total": 30.00,
-            "currency": "USD",
-            "status": "shipped"
-        }]
-    }
-}
-                         </code></pre>
-                    </section>
-
-                    <section>
-                        <h2>JSON API</h2>
-                        <p><a target="_blank" href="http://jsonapi.org/">http://jsonapi.org/</a></p>
-                        <ul>
-                            <li>CRUD oriented</li>
-                            <li>"Batteries included"</li>
-                        </ul>
-                        <pre><code data-trim contenteditable>
-{
-  "links": {
-    "self": "http://example.com/posts",
-    "next": "http://example.com/posts?page[offset]=2",
-  },
-  "data": [{
-    "type": "posts",
-    "id": "1",
-    "attributes": {
-      "title": "JSON API paints my bikeshed!"
-    },
-    "links": {
-      "self": "http://example.com/posts/1",
-      "author": {
-        "self": "http://example.com/posts/1/links/author",
-        "related": "http://example.com/posts/1/author",
-        "linkage": { "type": "people", "id": "9" }
-      }
-    }
-  }],
-  "included": [{
-    "type": "people",
-    "id": "9",
-    "attributes": {
-      "first-name": "Dan",
-      "last-name": "Gebhardt",	
-      "twitter": "dgeb"
-    },
-    "links": {
-      "self": "http://example.com/people/9"
-    }
-  }]
-}
-                             </code></pre>
-                    </section>
-
-                    <section>
-                        <h2>Mason</h2>
-                        <a target="_blank" href="https://github.com/JornWildt/Mason">https://github.com/JornWildt/Mason</a>
-                        <ul>
-                            <li>Like HAL, but with actiions</li>
-                        </ul>
-                        <pre><code data-trim contenteditable>
-{
-  "ID": 1,
-  "Title": "Program crashes when pressing ctrl-p",
-  "Severity": 5,
-  "@links": {
-    "self": {
-      "href": "http://issue-tracker.org/issues/1"
-    },
-    "up": {
-      "href": "http://issue-tracker.org/projects/1",
-      "title": "Containing project"
-    },
-  }
-  "@actions": {
-    "project-create": {
-        "type": "json",
-        "href": "http://issue-tracker.org/mason-demo/projects",
-        "title": "Create new project",
-        "schemaUrl": "http://issue-tracker.org/mason-demo/schemas/create-project"
-    }
-}
-                         </code></pre>
-                    </section>
-
-                    <section>
-                        <h2>JSON Patch</h2>
-                        <a target="_blank" href="http://jsonpatch.com/">http://jsonpatch.com/</a>
-                        <pre><code data-trim contenteditable>
-The original document:
-{
-  "baz": "qux",
-  "foo": "bar"
-}
-The patch:
-[
-  { "op": "replace", "path": "/baz", "value": "boo" },
-  { "op": "add", "path": "/hello", "value": ["world"] },
-  { "op": "remove", "path": "/foo"}
-]
-The result:
-{
-   "baz": "boo",
-   "hello": ["world"]
-}
-                         </code></pre>
-                    </section>
-					
-                    <section>
-                        <h2>JSON Schema</h2>
-                        <a target="_blank" href="http://json-schema.org/">http://json-schema.org/</a>
-						<ul>
-                            <li>Describe data format</li>
-                        </ul>
-                        <pre><code data-trim contenteditable class="json">
-{
-	"title": "Example Schema",
-	"type": "object",
-	"properties": {
-		"firstName": {
-			"type": "string"
-		},
-		"lastName": {
-			"type": "string"
-		},
-		"age": {
-			"description": "Age in years",
-			"type": "integer",
-			"minimum": 0
-		}
-	},
-	"required": ["firstName", "lastName"]
-}
-                         </code></pre>
-                    </section>
-
-                    <section>
-                        <h2>vnd.error</h2>
-                        <a target="_blank" href="https://github.com/blongden/vnd.error">https://github.com/blongden/vnd.error</a>
-                        <pre><code data-trim contenteditable class="json">
-{
-    "logref": "42",
-    "message": "A payment method is needed for the creation of an
-        order. Please retrieve a bill for the selected products to
-        see which payment methods are available.",
-    "type": "BAD_REQUEST",
-    "_links": {
-        "help": {
-            "href": "http://shopping-api-docs.sandbox.paylogic.com/orders",
-            "type": "text/html"
-        }
-    }
-}
-                         </code></pre>
-                    </section>
-                </section>
-				
-				<section>
-					<h1>Documentation and Discoverability</h1>
-					<blockquote>I don't need to write any documentation. My API is discoverable.</blockquote>
-				</section>
-
-				<section>
-					<h2>What is discoverability?</h2>
-					<ul>
-						<li>Allow client to "discover" what he can do</li>
-						<li>Links and actions only appear when relevant</li>
-						<li>The flow through the API is clear in every state</li>
-						<li>The server "owns" the process and is explicit about it</li>
-					</ul>
-				</section>
-				
-				<section>
-					<h2>Why is discoverability relevant?</h2>
-					<ul>
-						<li>Not for run-time discovery: Clients are not that advanced</li>
-						<li>Rather: Loose coupling between client and process + URI structure</li>
-						<li>So: Development-time discovery</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Documentation</h2>
-					<ul>
-						<li>Discoverability is no replacement for documentation</li>
-						<li>Document response formats, best practices, schemas, etc in text/HTML</li>
-						<li>Write documentation from process-perspective: What does the <strong>client developer</strong> want to achieve?</li>
-					</ul>
-				</section>
-
-                <!-- MISC -->
-
-                <section>
-                    <section>
-                        <h1>Best practices / lessons learned</h1>
-                    </section>
-					
-                    <section>
-                        <h2>Learn HTTP</h2>
-						<ul>
-							<li>Figure out what the verbs really <em>mean</em>, and why they exist</li>
-							<li>Learn about link relations, curies, etc</li>
-							<li>Use HTTP response codes instead of custom solutions</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>Always show as much as you safely can</h2>
-                        <ul>
-                            <li>All entities</li>
-                            <li>All attributes (with sensible empty defaults)</li>
-                        </ul>
-                        <p><small>If needed, allow client to filter them out (via header or query parameter)</small></p>
-                    </section>
-
-                    <section>
-                        <h2>Spend time on the unhappy paths</h2>
-                        <p>Design ALL error messages your API can generate and document them!</p>
-                    </section>
-
-                    <section>
-                        <h2>When implementing change: Leave your options open</h2>
-                        <ul>
-                            <li>What are my options?</li>
-                            <li>Which changes are coming up?</li>
-                            <li>For each choice: Does it close off other interesting flows / extensions / alternatives?</li>
-                        </ul>
-                    </section>
-
-                    <section>
-                        <h2>Push for clients using link relations</h2>
-                        <p>And build in a mechanism for link deprecation</p>
-                    </section>
-                </section>
+                </section -->
 
                 <!-- CLOSE -->
 
                 <section>
                     <h1>That's it!</h1>
-                    <h5>Reading material</h5>
-                    <ul>
-                        <li>REST in Practice - Jim Webber et al</li>
-                        <li>RESTful Web Services Cookbook - Subbu Allamaraju</li>
-                        <li>Google groups: api-craft, hal-discuss</li>
-                    </ul>
-                    <p>Want to work on a cool API? See <a target="_blank" href="http://www.paylogic.com/en/vacancy/">http://www.paylogic.com/en/vacancy/</a></p>
                     <p class="fragment">Questions?</p>
                 </section>
             </div>
 
         </div>
 
-        <script src="lib/js/head.min.js"></script>
-        <script src="js/reveal.js"></script>
+        <script src="static/js/head.min.js"></script>
+        <script src="static/js/reveal.js"></script>
 
         <script>
-
-            // Full list of configuration options available here:
-            // https://github.com/hakimel/reveal.js#configuration
             Reveal.initialize({
                 controls: true,
                 progress: true,
                 history: true,
                 center: true,
 
-                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+                theme: Reveal.getQueryHash().theme,
+                transition: Reveal.getQueryHash().transition || 'default',
 
-                // Parallax scrolling
-                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
-                // parallaxBackgroundSize: '2100px 900px',
-
-                // Optional libraries used to extend on reveal.js
                 dependencies: [
-                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    { src: 'static/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'static/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'static/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'static/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'static/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'static/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
                 ]
             });
         </script>

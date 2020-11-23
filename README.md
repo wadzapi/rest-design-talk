@@ -1,3 +1,7 @@
-# Designing REST API's - A process-oriented approach
+# Webzapi.me
+---
+Web-site project, will be published at _wadzapi.me_:
 
-A talk I gave on PyGrunn 2015 about designing REST API's. The main message is that REST API's should be designed process-first rather than data-first, which is what often happens. I also touch upon media types and some other relevant bits and pieces.
+* Forked from (larsderidder/rest-design-talk)[https://github.com/larsderidder/rest-design-talk]
+* Powered by (reveal.js)[https://github.com/hakimel/reveal.js]
+* Located at (webzapi.github)[https://github.com/wadzapi/webzapi]
